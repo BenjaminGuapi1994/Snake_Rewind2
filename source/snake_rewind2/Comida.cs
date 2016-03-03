@@ -17,15 +17,16 @@ namespace snake_game
             x = randFood.Next(0, 29) * 10;
             y = randFood.Next(0, 29) * 10;
             pincel = new SolidBrush(Color.Red); // color de la comida
-            width = 10;
-            height=10;
+            width = 8;
+            height=8;
             comidarec = new Rectangle(x, y, width, height);
 }
-        public void locaciondecomida(Random randFood) // posicion de la comida
+        public void locaciondecomida(int px, int py) // posicion de la comida
         {
-            x = randFood.Next(0, 29) * 10;
-            y = randFood.Next(0, 29) * 10;
-        
+           // x = randFood.Next(0, 29) * 10;
+            //y = randFood.Next(0, 29) * 10;
+            x = px;
+            y = py;
         }
 
         public void dibujodecomida(Graphics paper)// dibujo de la comida en el papel (campo de juego)

@@ -30,6 +30,7 @@ namespace snake_game
         {
             InitializeComponent();
             comida = new Comida(randcomida);//posiciona la comida
+
         }
         // evento paint (dibuja la serpiente y la comida)
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -51,10 +52,10 @@ namespace snake_game
                 timer1.Enabled = true;
                // tutosymaslabel.Text= "";
                 spaceBarLabel.Text = "";
-                abajo = false;
+                abajo = true;
                 arriba = false;
                 izquierda = false;
-                derecha = true;
+                derecha = false;
             }
             // si preciona abajo
             if (e.KeyData == Keys.Down && arriba == false)
@@ -89,24 +90,120 @@ namespace snake_game
                 izquierda = false;
             }
         }
-
+        bool bandera = false; int b1 = 0, b2=0;
         // uso del timer para controlar el juego
+        int max = 281, min = 0;
+        
         private void timer1_Tick(object sender, EventArgs e)
         {
+            snakes.movimientoderecha();
+            int lX = comida.comidarec.X;
+            int lY = comida.comidarec.Y;
             snakeScoreLabel.Text = Convert.ToString(score);// indica la puntuacion actual
-         
-            if (abajo) {
-                snakes.movimientoabajo(); // mueve la serpiente hacia abajo
+            if (snakes.SnakeRec[0].X > lX)
+            {
+                if (snakes.SnakeRec[0].Y > lY)
+                {
+                    snakes.movimientoabajo(); // mueve la serpiente hacia derecha
+                    if (snakes.SnakeRec[0].Y == lY)
+                        snakes.movimientoizquierda();
+
+                }
+                else
+                    if (snakes.SnakeRec[0].Y == lY)
+                    {
+                        snakes.movimientoabajo(); // mueve la serpiente hacia abajo
+                        if (snakes.SnakeRec[0].Y < lY)
+                        {
+                            snakes.movimientoizquierda();
+
+                        }
+                        if (snakes.SnakeRec[0].Y == lY)
+                        {
+                            snakes.movimientoarriba();
+                        }
+                    }
+                    else
+                        if (snakes.SnakeRec[0].Y < lY)
+                        {
+                            snakes.movimientoarriba();
+
+                        }
+
+
+                if (snakes.SnakeRec[0].Y < lY)
+                {
+                    snakes.movimientoizquierda(); // mueve la serpiente hacia izquierda                      
+                }
             }
-            if (arriba) {
-                snakes.movimientoarriba(); // mueve la serpiente hacia arriba
+
+            else// medioooooooooo
+            {
+                if (snakes.SnakeRec[0].X < lX)
+                {
+                    if (snakes.SnakeRec[0].Y > lY)
+                    {
+                        snakes.movimientoabajo(); // mueve la serpiente hacia derecha
+                        if (snakes.SnakeRec[0].Y == lY)
+                            snakes.movimientoderecha();
+
+                    }
+                    else
+                        if (snakes.SnakeRec[0].Y == lY)
+                        {
+                            snakes.movimientoabajo(); // mueve la serpiente hacia abajo
+                            if (snakes.SnakeRec[0].Y < lY)
+                            {
+                                snakes.movimientoderecha();
+
+                            }
+                            if (snakes.SnakeRec[0].Y == lY)
+                            {
+                                snakes.movimientoarriba();
+                            }
+                        }
+                        else
+                        {
+                            if (snakes.SnakeRec[0].Y < lY)
+                            {
+                                snakes.movimientoarriba();
+
+                            }
+
+
+                            if (snakes.SnakeRec[0].Y < lY)
+                            {
+                                snakes.movimientoderecha(); // mueve la serpiente hacia izquierda                      
+                            }
+                        }
+                }
+
+
             }
-            if (derecha) {
-                snakes.movimientoderecha(); // mueve la serpiente hacia la derecha
+
+            if (snakes.SnakeRec[0].X == lX)
+            {
+                if (snakes.SnakeRec[0].Y > lY)
+                {
+                    snakes.movimientoabajo();
+
+                }
+                else
+                {
+                    if (snakes.SnakeRec[0].Y < lY)
+                    {
+                        snakes.movimientoarriba();
+
+                    }
+                }
+
+
             }
-            if (izquierda) {
-                snakes.movimientoizquierda(); // mueve la serpiente hacia izquierda
-            }
+
+
+            
+ 
+            
             
             this.Invalidate(); // "repinta el mapa" con esto vemos el movimiento de la serpiente 
             
@@ -121,11 +218,18 @@ namespace snake_game
                 {
                     player.SoundLocation = "C:/Users/User/Desktop/snake - Tutoriales y mas - By Edark/snake game/Resources/boom.wav";// direccion del sonido
                     player.Play();// suena sonido
-
+                    bandera = true;
                     score += 1; // la puntuacion sube de 1 en 1
                     snakes.crecimientodeSnake(); // la serpiente crece
-                    comida.locaciondecomida(randcomida);// reaparece la comida en otro lugar
-
+                   // comida.locaciondecomida(randcomida);// reaparece la comida en otro lugar
+                    timer1.Stop();
+                    spaceBarLabel.Text = "Comi ";
+                    b1 = 0;
+                    b2 = 0;
+                    max = 281;
+                    min = 0;
+                    timer1.Start();
+            
                 }
             }
         }
@@ -225,6 +329,14 @@ namespace snake_game
             // mostrar pantalla de reglas
             reglas regla = new reglas();
             regla.Show();
+        }
+        int locX = 0, locY=0;
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+           comida.locaciondecomida(e.X,e.Y);
+
+           locX = e.X;
+           locY = e.Y;
         }
 
         

@@ -30,6 +30,7 @@ namespace snake_game
            height = 10;
            for (int i = 0; i < snakeRec.Length; i++) // creacion de cada rectangulo que comprende ala serpiente
            {
+               
                snakeRec[i] = new Rectangle(x, y, width, height);
                x -= 10;
            }
